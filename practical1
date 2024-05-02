@@ -1,0 +1,28 @@
+import scapy.all
+from scapy.layers.inet import IP, TCP, UDP
+from scapy.layers.l2 import Ether, ARP
+
+
+def packet_handler(packet):
+    if Ether in packet:
+        print("Ethernet Frame:")
+        print(f"Source MAC: {packet[Ether].src}, Destination MAC: {packet[Ether].dst}")
+
+    if ARP in packet:
+        print("\nARP Packet:")
+        print(f"Source MAC: {packet[ARP].hwsrc}, Destination MAC: {packet[ARP].hwdst}")
+
+    if IP in packet:
+        print("\nIP Packet:")
+        print(f"Source IP: {packet[IP].src}, Destination IP: {packet[IP].dst}")
+
+    if TCP in packet:
+        print("\nTCP Segment:")
+        print(f"Source Port: {packet[TCP].sport}, Destination Port: {packet[TCP].dport}")
+
+    if UDP in packet:
+        print("\nUDP Datagram:")
+        print(f"Source Port: {packet[UDP].sport}, Destination Port: {packet[UDP].dport}")
+
+
+scapy.all.sniff(iface='Wi-Fi', prn=packet_handler, store=0)
